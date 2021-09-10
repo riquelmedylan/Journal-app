@@ -1,62 +1,56 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { useForm } from '../../hooks/useForm';
-import { useDispatch, useSelector } from 'react-redux';
-import validator from 'validator';
-import { removeError, setError } from '../../actions/ui';
-import { startRegisterEmailPasswordName } from '../../actions/auth';
+import React from "react";
+import { Link } from "react-router-dom";
+import { useForm } from "../../hooks/useForm";
+import { useDispatch, useSelector } from "react-redux";
+import validator from "validator";
+import { removeError, setError } from "../../actions/ui";
+import { startRegisterEmailPasswordName } from "../../actions/auth";
 
 export const RegisterScreen = () => {
-
     const dispatch = useDispatch();
-    const {msgError} = useSelector(state => state.ui)
+    const { msgError } = useSelector((state) => state.ui);
 
     const [values, handleInputChange] = useForm({
-        name:'Hernando',
-        email: 'hernando@gmail.com',
-        password: '1234567',
-        password2: '1234567'
-    })
+        name: "",
+        email: "",
+        password: "",
+        password2: "",
+    });
 
-    const {name,email,password,password2} = values
+    const { name, email, password, password2 } = values;
 
-    const handleRegister = (e) =>{
-        e.preventDefault()
-        if(formValid()){
-            dispatch(startRegisterEmailPasswordName(email,password,name))
+    const handleRegister = (e) => {
+        e.preventDefault();
+        if (formValid()) {
+            dispatch(startRegisterEmailPasswordName(email, password, name));
         }
-    }
+    };
 
-    const formValid = () =>{
-        if(name.trim().length === 0){
-            dispatch(setError('Name is required'))
-            return false
-        }else if(!validator.isEmail(email)){
-            dispatch(setError('Email is required'))
-            return false
-        }else if(password !== password2 || password.length < 5){
-            dispatch(setError('Password should be at least 6 characters'))
-            return false
+    const formValid = () => {
+        if (name.trim().length === 0) {
+            dispatch(setError("Name is required"));
+            return false;
+        } else if (!validator.isEmail(email)) {
+            dispatch(setError("Email is required"));
+            return false;
+        } else if (password !== password2 || password.length < 5) {
+            dispatch(setError("Password should be at least 6 characters"));
+            return false;
         }
-        dispatch( removeError() )
-        return true
-    }
+        dispatch(removeError());
+        return true;
+    };
 
     return (
         <>
             <h3 className="auth__title">Register</h3>
 
-            <form onSubmit={ handleRegister }>
+            <form onSubmit={handleRegister}>
+                {msgError && (
+                    <div className="auth__alert-error">{msgError}</div>
+                )}
 
-                {
-                    msgError && (
-                    <div className="auth__alert-error">
-                        {msgError}
-                    </div>
-                    )
-                }
-
-                <input 
+                <input
                     type="text"
                     placeholder="Name"
                     name="name"
@@ -66,7 +60,7 @@ export const RegisterScreen = () => {
                     onChange={handleInputChange}
                 />
 
-                <input 
+                <input
                     type="text"
                     placeholder="Email"
                     name="email"
@@ -76,7 +70,7 @@ export const RegisterScreen = () => {
                     onChange={handleInputChange}
                 />
 
-                <input 
+                <input
                     type="password"
                     placeholder="Password"
                     name="password"
@@ -85,7 +79,7 @@ export const RegisterScreen = () => {
                     onChange={handleInputChange}
                 />
 
-                <input 
+                <input
                     type="password"
                     placeholder="Confirm password"
                     name="password2"
@@ -94,7 +88,6 @@ export const RegisterScreen = () => {
                     onChange={handleInputChange}
                 />
 
-
                 <button
                     type="submit"
                     className="btn btn-primary btn-block mb-5"
@@ -102,14 +95,10 @@ export const RegisterScreen = () => {
                     Register
                 </button>
 
-                <Link 
-                    to="/auth/login"
-                    className="link"
-                >
+                <Link to="/auth/login" className="link">
                     Already registered?
                 </Link>
-
             </form>
         </>
-    )
-}
+    );
+};
